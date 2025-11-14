@@ -1,0 +1,55 @@
+# Build / .NET
+bin/
+obj/
+*.exe
+*.dll
+*.pdb
+*.cache
+*.log
+
+# VSCode
+.vscode/
+.history/
+*.code-workspace
+
+# User / Temp
+*.user
+*.userosscache
+*.suo
+*.tmp
+*.temp
+*.pid
+*.svclog
+
+# Packages / NuGet
+packages/
+*.nupkg
+*.snupkg
+.nuget/
+
+# Visual Studio (au cas où tu ouvres le projet une fois)
+.vs/
+*.opensdf
+*.sdf
+
+# Rider (juste au cas où)
+.idea/
+*.DotSettings
+
+# WPF spécifiques
+*.dbmdl
+Generated_Code/
+
+# Crash dumps
+*.mdmp
+*.dmp
+
+# Logs
+*.log
+logs/
+
+# OS
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store

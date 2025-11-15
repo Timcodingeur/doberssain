@@ -5,8 +5,210 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:doberssainLeNul"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
+        Title="DOBERSSAIN LE NUL™" Height="600" Width="800"
+        Background="Black" KeyDown="Window_KeyDown" Focusable="True">
+    
+    <Window.Resources>
+        <!-- Storyboards pour les transitions -->
+        <Storyboard x:Key="FadeInStoryboard">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                           From="0" To="1" Duration="0:0:1"/>
+        </Storyboard>
+        
+        <Storyboard x:Key="FadeOutStoryboard">
+            <DoubleAnimation Storyboard.TargetProperty="Opacity"
+                           From="1" To="0" Duration="0:0:0.5"/>
+        </Storyboard>
+        
+        <Storyboard x:Key="MoneyFallStoryboard" RepeatBehavior="Forever">
+            <DoubleAnimation Storyboard.TargetName="MoneyBill1" 
+                           Storyboard.TargetProperty="(Canvas.Top)"
+                           From="-50" To="550" Duration="0:0:2"/>
+            <DoubleAnimation Storyboard.TargetName="MoneyBill2" 
+                           Storyboard.TargetProperty="(Canvas.Top)"
+                           From="-50" To="550" Duration="0:0:2.5" BeginTime="0:0:1"/>
+            <DoubleAnimation Storyboard.TargetName="MoneyBill3" 
+                           Storyboard.TargetProperty="(Canvas.Top)"
+                           From="-50" To="550" Duration="0:0:3" BeginTime="0:0:0.5"/>
+        </Storyboard>
+        
+        <Storyboard x:Key="CasinoBlinkStoryboard" RepeatBehavior="Forever">
+            <ColorAnimation Storyboard.TargetName="Scene3Background"
+                          Storyboard.TargetProperty="Color"
+                          From="Black" To="Gold" Duration="0:0:0.5" AutoReverse="True"/>
+        </Storyboard>
+    </Window.Resources>
+    
+    <Grid x:Name="MainGrid">
+        <!-- Scène 0: Intro -->
+        <Grid x:Name="Scene0" Visibility="Visible">
+            <TextBlock Text="DOBERSSAIN LE NUL™" 
+                     FontFamily="Comic Sans MS" FontSize="36" FontWeight="Bold"
+                     Foreground="White" HorizontalAlignment="Center" 
+                     VerticalAlignment="Center" Margin="0,-100,0,0"/>
+            
+            <Button x:Name="StartBtn" Content="Commencer" 
+                  Width="200" Height="50" FontFamily="Comic Sans MS" FontSize="18"
+                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                  Margin="0,100,0,0" Click="StartBtn_Click"/>
+        </Grid>
+        
+        <!-- Scène 1: Choix du destin -->
+        <Grid x:Name="Scene1" Visibility="Collapsed">
+            <TextBlock Text="Choisissez votre destin, pauvre mortel :" 
+                     FontFamily="Comic Sans MS" FontSize="24" FontWeight="Bold"
+                     Foreground="White" HorizontalAlignment="Center" 
+                     VerticalAlignment="Top" Margin="0,50,0,0"/>
+            
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Button x:Name="Choice1Btn" Content="Rester une merde comme Doberssain" 
+                      Width="400" Height="60" FontFamily="Comic Sans MS" FontSize="16"
+                      Click="Choice1Btn_Click" Margin="0,0,0,20"/>
+                
+                <Button x:Name="Choice2Btn" Content="Sortir de cette sphère" 
+                      Width="400" Height="60" FontFamily="Comic Sans MS" FontSize="16"
+                      Click="Choice2Btn_Click" Margin="0,0,0,20"/>
+                
+                <Button x:Name="Choice3Btn" Content="Être une merde avec -20% de réduction" 
+                      Width="400" Height="60" FontFamily="Comic Sans MS" FontSize="16"
+                      Click="Choice3Btn_Click"/>
+            </StackPanel>
+        </Grid>
+        
+        <!-- Scène 2: Rester une merde -->
+        <Grid x:Name="Scene2" Visibility="Collapsed">
+            <Canvas x:Name="MoneyCanvas" Width="800" Height="600">
+                <!-- Stickman devant PC (placeholder rectangles) -->
+                <Rectangle x:Name="Stickman" Fill="White" Width="60" Height="100" 
+                         Canvas.Left="150" Canvas.Top="400"/>
+                <Rectangle x:Name="Computer" Fill="Gray" Width="80" Height="60" 
+                         Canvas.Left="250" Canvas.Top="420"/>
+                
+                <!-- Billets qui tombent -->
+                <Rectangle x:Name="MoneyBill1" Fill="Green" Width="40" Height="20" 
+                         Canvas.Left="100" Canvas.Top="-50"/>
+                <Rectangle x:Name="MoneyBill2" Fill="Green" Width="40" Height="20" 
+                         Canvas.Left="300" Canvas.Top="-50"/>
+                <Rectangle x:Name="MoneyBill3" Fill="Green" Width="40" Height="20" 
+                         Canvas.Left="500" Canvas.Top="-50"/>
+                
+                <TextBlock x:Name="SarcasticText" Text="Félicitations ! Vous excellez dans l'art de ne rien faire ! Continuez comme ça, c'est votre voie !" 
+                         FontFamily="Comic Sans MS" FontSize="20" Foreground="Yellow"
+                         Canvas.Left="50" Canvas.Top="50" TextWrapping="Wrap" Width="700"/>
+            </Canvas>
+            
+            <Button x:Name="ContinueFromScene2Btn" Content="Accepter mon destin minable" 
+                  Width="250" Height="50" FontFamily="Comic Sans MS" FontSize="16"
+                  HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                  Margin="0,0,0,50" Click="ContinueFromScene2Btn_Click"/>
+        </Grid>
+        
+        <!-- Scène 3: Sortir de la sphère -->
+        <Grid x:Name="Scene3" Visibility="Collapsed">
+            <Grid.Background>
+                <SolidColorBrush x:Name="Scene3Background" Color="Black"/>
+            </Grid.Background>
+            
+            <Canvas x:Name="GameCanvas" Width="800" Height="600">
+                <!-- La sphère -->
+                <Ellipse x:Name="Sphere" Fill="Gray" Opacity="0.5" 
+                       Width="400" Height="400" Canvas.Left="200" Canvas.Top="100"/>
+                
+                <!-- Le joueur -->
+                <Rectangle x:Name="Player" Fill="Red" Width="20" Height="20" 
+                         Canvas.Left="390" Canvas.Top="290"/>
+                
+                <TextBlock x:Name="GameInstructions" Text="Utilisez les flèches pour sortir de la sphère grise !" 
+                         FontFamily="Comic Sans MS" FontSize="18" Foreground="White"
+                         Canvas.Left="50" Canvas.Top="20"/>
+                
+                <TextBlock x:Name="CasinoUnlockedText" Text="CASINO UNLOCKED !" 
+                         FontFamily="Comic Sans MS" FontSize="36" FontWeight="Bold" 
+                         Foreground="Gold" Canvas.Left="250" Canvas.Top="50"
+                         Visibility="Collapsed"/>
+                
+                <TextBlock x:Name="CasinoEndingText" Text="Bravo, tu pourras dire à ta famille qu'ils n'auront plus à dormir dans une maison miteuse car vous l'avez perdue !" 
+                         FontFamily="Comic Sans MS" FontSize="18" Foreground="Red"
+                         Canvas.Left="50" Canvas.Top="100" TextWrapping="Wrap" Width="700"
+                         Visibility="Collapsed"/>
+            </Canvas>
+            
+            <Button x:Name="ContinueFromScene3Btn" Content="Entrer au casino" 
+                  Width="200" Height="50" FontFamily="Comic Sans MS" FontSize="16"
+                  HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                  Margin="0,0,0,50" Visibility="Collapsed" Click="ContinueFromScene3Btn_Click"/>
+        </Grid>
+        
+        <!-- Scène 4: -20% de réduction -->
+        <Grid x:Name="Scene4" Visibility="Collapsed">
+            <Canvas Width="800" Height="600">
+                <!-- Trône doré (placeholder) -->
+                <Rectangle x:Name="Throne" Fill="Gold" Width="150" Height="200" 
+                         Canvas.Left="100" Canvas.Top="300"/>
+                
+                <!-- Stickman avec lunettes -->
+                <Rectangle x:Name="StickmanWithGlasses" Fill="White" Width="60" Height="100" 
+                         Canvas.Left="150" Canvas.Top="250"/>
+                <Rectangle x:Name="Glasses" Fill="Black" Width="30" Height="10" 
+                         Canvas.Left="165" Canvas.Top="270"/>
+                
+                <!-- Ordinateur cliquable -->
+                <Rectangle x:Name="ClickableComputer" Fill="Silver" Width="100" Height="80" 
+                         Canvas.Left="500" Canvas.Top="400" Cursor="Hand" 
+                         MouseLeftButtonDown="Ordi_Click"/>
+                <TextBlock Text="PC" FontFamily="Comic Sans MS" FontSize="16" 
+                         Canvas.Left="530" Canvas.Top="430" Foreground="Black"/>
+                
+                <TextBlock x:Name="PremiumText" Text="Bravo, vous êtes la version premium de la médiocrité." 
+                         FontFamily="Comic Sans MS" FontSize="24" FontWeight="Bold"
+                         Foreground="Gold" Canvas.Left="50" Canvas.Top="50" 
+                         TextWrapping="Wrap" Width="700"/>
+                
+                <TextBlock x:Name="MerdeEndingText" Text="Vous avez choisi de rester fidèle à votre nature profonde. Respect ! Au moins, vous êtes authentique dans votre nullité." 
+                         FontFamily="Comic Sans MS" FontSize="20" Foreground="White"
+                         Canvas.Left="50" Canvas.Top="150" TextWrapping="Wrap" Width="700"
+                         Visibility="Collapsed"/>
+                
+                <TextBlock Text="Cliquez sur l'ordinateur pour une surprise !" 
+                         FontFamily="Comic Sans MS" FontSize="16"
+                         Foreground="White" Canvas.Left="400" Canvas.Top="500"/>
+            </Canvas>
+            
+            <Button x:Name="FinalBtn" Content="Terminer cette expérience" 
+                  Width="250" Height="50" FontFamily="Comic Sans MS" FontSize="16"
+                  HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                  Margin="0,0,0,50" Click="FinalBtn_Click"/>
+        </Grid>
+        
+        <!-- Scène finale -->
+        <Grid x:Name="SceneFinal" Visibility="Collapsed">
+            <TextBlock Text="Merci d'avoir participé à cette expérience scientifique sur la nullité humaine." 
+                     FontFamily="Comic Sans MS" FontSize="20" FontWeight="Bold"
+                     Foreground="White" HorizontalAlignment="Center" 
+                     VerticalAlignment="Center" TextWrapping="Wrap" 
+                     Width="600" TextAlignment="Center" Margin="0,-50,0,0"/>
+            
+            <Button x:Name="QuitBtn" Content="Quitter" 
+                  Width="150" Height="50" FontFamily="Comic Sans MS" FontSize="18"
+                  HorizontalAlignment="Center" VerticalAlignment="Center"
+                  Margin="0,100,0,0" Click="QuitBtn_Click"/>
+        </Grid>
+        
+        <!-- Message d'Easter Egg -->
+        <Grid x:Name="EasterEggScene" Visibility="Collapsed">
+            <TextBlock Text="Doberssain a gagné. Vous non." 
+                     FontFamily="Comic Sans MS" FontSize="48" FontWeight="Bold"
+                     Foreground="Red" HorizontalAlignment="Center" 
+                     VerticalAlignment="Center" TextAlignment="Center"/>
+        </Grid>
+        
+        <!-- MediaElement pour les sons -->
+                <!-- MediaElement pour les sons -->
+        <MediaElement x:Name="SoundPlayer" LoadedBehavior="Manual" Volume="0.5"/>
+        
+        <!-- MediaElement pour la musique de fond -->
+        <!-- MediaElement pour la musique de fond -->
+        <MediaElement x:Name="BackgroundMusic" LoadedBehavior="Manual" Volume="0.3" 
+                    MediaEnded="BackgroundMusic_MediaEnded"/>
     </Grid>
 </Window>
